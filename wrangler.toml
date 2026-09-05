@@ -1,0 +1,9 @@
+name = "guruspares"
+compatibility_date = "2026-05-29"
+
+workers_dev = true
+preview_urls = true
+
+[assets]
+directory = "./build"
+not_found_handling = "single-page-application"
