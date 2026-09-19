@@ -6,10 +6,7 @@ import { brandAssets, company } from '../siteData';
 const links = [
   ['Home', '/'],
   ['Company', '/company'],
-  ['Divisions', '/divisions'],
   ['Products', '/products'],
-  ['Responsibility', '/responsibility'],
-  ['Blog', '/blog'],
   ['Careers', '/careers'],
   ['Contact', '/contact'],
 ];
@@ -51,7 +48,7 @@ export default function Navbar() {
           <button className="icon-btn menu-btn" onClick={() => setOpen(true)} aria-label="Open menu"><Menu size={22} /></button>
         </div>
       </header>
-      <div className={`mobile-menu ${open ? 'open' : ''}`}>
+      <div className={`mobile-menu ${open ? 'open' : ''}`} aria-hidden={!open}>
         <button className="mobile-backdrop" onClick={() => setOpen(false)} aria-label="Close menu" />
         <aside>
           <div className="mobile-head">

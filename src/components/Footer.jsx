@@ -24,8 +24,6 @@ export default function Footer() {
         <div>
           <h3>Company</h3>
           <Link to="/company">Who We Are</Link>
-          <Link to="/divisions">Divisions</Link>
-          <Link to="/responsibility">Responsibility</Link>
           <Link to="/careers">Careers</Link>
         </div>
         <div>
@@ -33,7 +31,7 @@ export default function Footer() {
           <a href={`tel:${company.phones[0].replace(/\D/g, '')}`}><Phone size={15} /> {company.phones[0]}</a>
           <a href={`tel:${company.phones[1].replace(/\D/g, '')}`}><Phone size={15} /> {company.phones[1]}</a>
           <a href={`mailto:${company.email}`}><Mail size={15} /> {company.email}</a>
-          <span><MapPin size={15} /> {company.address.join(', ')}</span>
+          <span className="footer-location"><MapPin size={15} aria-hidden="true" /> {company.address.join(', ')}</span>
         </div>
       </div>
       <div className="wrap footer-bottom">Copyright 2026 Guru Tex Spares. All rights reserved.</div>

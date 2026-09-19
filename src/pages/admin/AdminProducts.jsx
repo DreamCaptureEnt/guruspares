@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Edit, GripVertical, ImagePlus, Maximize2, Save, Trash2, Upload } from 'lucide-react';
 import { api } from '../../api';
-import { formatDate, PageHeader, Pagination } from './AdminHelpers';
+import { ConfirmDialog, formatDate, PageHeader, Pagination } from './AdminHelpers';
 import { useToast } from '../../components/Toast'; // Adjust path as needed
 import ImageViewer from '../../components/ImageViewer';
 
@@ -41,6 +41,7 @@ export default function AdminProducts() {
   const [activeTab, setActiveTab] = useState('details');
   const [draggingProductId, setDraggingProductId] = useState(null);
   const [viewerIndex, setViewerIndex] = useState(null);
+  const [confirming, setConfirming] = useState(null);
 
   const params = useMemo(() => ({
     page,
@@ -157,7 +158,6 @@ export default function AdminProducts() {
   };
 
   const deleteImage = async (image) => {
-    if (!window.confirm(`Delete image "${image.file_name}"?`)) return;
     try {
       await api.deleteProductImage(image.id, image.file_name);
       setImages((current) => current.filter((item) => item.id !== image.id).map((item, index) => ({ ...item, order_no: index + 1 })));
@@ -165,6 +165,8 @@ export default function AdminProducts() {
       toast.success('✓ Image deleted successfully!');
     } catch (err) {
       toast.error(err.message || 'Failed to delete image');
+    } finally {
+      setConfirming(null);
     }
   };
 
@@ -225,7 +227,6 @@ export default function AdminProducts() {
       toast.error('Cannot delete: product ID is missing');
       return;
     }
-    if (!window.confirm(`Delete product "${row.name}"?`)) return;
     try {
       await api.deleteProduct(row.id, {
         name: row.name,
@@ -235,6 +236,8 @@ export default function AdminProducts() {
       toast.success(`✓ Product "${row.name}" deleted successfully!`);
     } catch (err) {
       toast.error(err.message || 'Failed to delete product');
+    } finally {
+      setConfirming(null);
     }
   };
 
@@ -551,7 +554,7 @@ export default function AdminProducts() {
                       </div>
                       <button
                         type="button"
-                        onClick={() => deleteImage(image)}
+                        onClick={() => setConfirming({ type: 'image', item: image })}
                         className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-red-500 text-white opacity-0 transition-opacity hover:bg-red-600 group-hover:opacity-100"
                       >
                         <Trash2 size={16} />
@@ -587,6 +590,13 @@ export default function AdminProducts() {
             initialIndex={viewerIndex}
             title={editing.name || 'Product image'}
             onClose={() => setViewerIndex(null)}
+          />
+        )}
+        {confirming?.type === 'image' && (
+          <ConfirmDialog
+            message={`Delete image "${confirming.item.file_name}"? This action cannot be undone.`}
+            onCancel={() => setConfirming(null)}
+            onConfirm={() => deleteImage(confirming.item)}
           />
         )}
       </div>
@@ -701,7 +711,7 @@ export default function AdminProducts() {
                       <Edit size={16} />
                     </button>
                     <button
-                      onClick={() => remove(row)}
+                      onClick={() => setConfirming({ type: 'product', item: row })}
                       className="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100"
                     >
                       <Trash2 size={16} />
@@ -714,6 +724,13 @@ export default function AdminProducts() {
         </table>
       </div>
       <Pagination meta={meta} onPage={setPage} />
+      {confirming?.type === 'product' && (
+        <ConfirmDialog
+          message={`Delete product "${confirming.item.name}"? This action cannot be undone.`}
+          onCancel={() => setConfirming(null)}
+          onConfirm={() => remove(confirming.item)}
+        />
+      )}
     </div>
   );
 }

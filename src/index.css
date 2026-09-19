@@ -50,12 +50,14 @@ button:disabled { cursor: not-allowed; }
 .mobile-backdrop { position: absolute; inset: 0; border: 0; background: transparent; }
 .mobile-menu.open { pointer-events: auto; }
 .mobile-menu.open .mobile-backdrop { background: rgba(20,33,43,.4); }
-.mobile-menu aside { position: absolute; top: 0; right: 0; bottom: 0; width: min(330px, 90vw); background: #fff; padding: 18px; transform: translateX(105%); transition: transform .32s cubic-bezier(.22,1,.36,1); display: flex; flex-direction: column; gap: 8px; }
+.mobile-menu aside { position: absolute; top: 0; right: 0; bottom: 0; width: min(330px, 90vw); max-height: 100dvh; overflow-y: auto; overscroll-behavior: contain; background: #fff; padding: 18px 18px max(18px, env(safe-area-inset-bottom)); transform: translateX(105%); transition: transform .32s cubic-bezier(.22,1,.36,1); display: flex; flex-direction: column; gap: 8px; }
 .mobile-menu.open aside { transform: translateX(0); }
 .mobile-head { display: flex; align-items: center; justify-content: space-between; font-weight: 900; padding-bottom: 12px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
 .mobile-menu aside a:not(.nav-cta) { padding: 13px 10px; border-radius: 8px; font-weight: 800; color: #41505a; }
 .mobile-menu aside a.active { background: rgba(20,184,166,.1); color: var(--teal); }
 .mobile-cta { margin-top: 12px; }
+.footer-location { align-items: flex-start !important; }
+.footer-location svg { flex: 0 0 auto; margin-top: 3px; }
 
 .hero { min-height: clamp(520px, calc(100vh - 96px), 680px); display: grid; align-items: end; position: relative; color: #fff; background: #111; overflow: hidden; }
 .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -124,9 +126,9 @@ p { line-height: 1.65; }
   overflow-wrap: anywhere;
 }
 
-.image-viewer { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 20px; color: #fff; }
-.image-viewer__backdrop { position: absolute; inset: 0; border: 0; background: rgba(2,6,23,.82); backdrop-filter: blur(14px); }
-.image-viewer__panel { position: relative; z-index: 1; width: min(1180px, 100%); height: min(820px, calc(100vh - 40px)); display: grid; grid-template-rows: auto 1fr auto; border: 1px solid rgba(255,255,255,.14); border-radius: 22px; overflow: hidden; background: rgba(15,23,42,.82); box-shadow: 0 30px 90px rgba(0,0,0,.45); }
+.image-viewer { position: fixed; inset: 0; z-index: 2147483646; display: grid; place-items: center; padding: 20px; color: #fff; background: rgba(2,6,23,.82); pointer-events: auto; }
+.image-viewer__backdrop { position: absolute; inset: 0; z-index: 0; border: 0; background: rgba(2,6,23,.82); backdrop-filter: blur(14px); cursor: default; }
+.image-viewer__panel { position: relative; z-index: 1; width: min(1180px, 100%); height: min(820px, calc(100vh - 40px)); display: grid; grid-template-rows: auto 1fr auto; border: 1px solid rgba(255,255,255,.14); border-radius: 22px; overflow: hidden; background: #0f172a; box-shadow: 0 30px 90px rgba(0,0,0,.45); pointer-events: auto; }
 .image-viewer__topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.12); background: rgba(15,23,42,.72); }
 .image-viewer__topbar h2 { margin: 0; font-size: clamp(15px, 2vw, 18px); line-height: 1.25; max-width: 420px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .image-viewer__eyebrow { margin: 0 0 2px; color: #5eead4; font-size: 11px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; line-height: 1.2; }
@@ -295,6 +297,34 @@ textarea:focus-visible {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.career-form {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.career-form h2,
+.career-form p {
+  margin-top: 0;
+}
+
+.career-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 0;
+}
+
+.career-contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--teal);
+  font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .contact-card {
@@ -792,6 +822,7 @@ textarea:focus-visible {
   .filters { top: 68px; }
   .cta-band { padding: 18px; }
   .footer { padding-top: 34px; }
+  .mobile-menu aside { width: min(340px, calc(100vw - 20px)); }
   .image-viewer { padding: 0; }
   .image-viewer__panel { height: 100vh; border-radius: 0; border-left: 0; border-right: 0; }
   .image-viewer__topbar { align-items: flex-start; flex-direction: column; }

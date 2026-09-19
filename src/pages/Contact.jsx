@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, Mail, MapPin, Phone, Send } from 'lucide-react';
+import { Mail, MapPin, Phone, Send } from 'lucide-react';
 import PageHero from '../components/PageHero';
 import { company, pageHeroImages } from '../siteData';
 
@@ -29,10 +29,6 @@ export default function Contact() {
               <div className="info-row">
                 <strong><Mail size={16} /> Email</strong>
                 <a className="muted break-link" href={`mailto:${company.email}`}>{company.email}</a>
-              </div>
-              <div className="info-row">
-                <strong><ExternalLink size={16} /> IndiaMart</strong>
-                <a className="muted break-link" href={company.indiamart} target="_blank" rel="noreferrer">{company.indiamart}</a>
               </div>
             </div>
           </div>

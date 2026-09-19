@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-react';
 
 export function PageHeader({ title, subtitle, onAdd, addLabel }) {
@@ -44,8 +45,8 @@ export function Pagination({ meta, onPage }) {
 
 export function Modal({ title, children, onClose }) {
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/50 p-4">
-      <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white shadow-2xl">
+    <div className="admin-modal fixed inset-0 z-50 grid place-items-center bg-slate-950/50 p-4">
+      <div className="admin-modal__panel max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white shadow-2xl">
         <div className="sticky top-0 flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4">
           <h2 className="text-xl font-black text-slate-900">{title}</h2>
           <button onClick={onClose} className="grid h-9 w-9 place-items-center rounded-lg bg-slate-100 text-slate-500">
@@ -56,6 +57,28 @@ export function Modal({ title, children, onClose }) {
       </div>
     </div>
   );
+}
+
+export function ConfirmDialog({ title = 'Confirm deletion', message, onConfirm, onCancel }) {
+  const dialog = (
+    <div className="admin-confirm fixed inset-0 grid place-items-center p-4" role="dialog" aria-modal="true" aria-labelledby="admin-confirm-title">
+      <button type="button" className="admin-confirm__backdrop absolute inset-0" onClick={onCancel} aria-label="Cancel confirmation" />
+      <div className="admin-confirm__panel relative w-full max-w-md rounded-lg bg-white p-6 shadow-2xl">
+        <h2 id="admin-confirm-title" className="text-xl font-black text-slate-900">{title}</h2>
+        <p className="mt-3 text-sm leading-6 text-slate-600">{message}</p>
+        <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button type="button" onClick={onCancel} className="rounded-lg border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="button" onClick={onConfirm} className="rounded-lg bg-red-600 px-4 py-3 text-sm font-bold text-white hover:bg-red-700">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return typeof document !== 'undefined' ? createPortal(dialog, document.body) : dialog;
 }
 
 export function formatDate(value) {

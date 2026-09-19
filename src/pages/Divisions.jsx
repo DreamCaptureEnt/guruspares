@@ -25,7 +25,7 @@ export default function Divisions() {
   return (
     <>
       <PageHero eyebrow="Divisions" title="Product and service areas" image={pageHeroImages.divisions} imageAlt="Textile spare product divisions">
-        <p>Organised around airjet loom spares, temple ring solutions and maintenance support - pick an area to see the products that belong to it.</p>
+        <p>Organised around Airjet loom spares, temple ring solutions and maintenance support - pick an area to see the products that belong to it.</p>
       </PageHero>
 
       <section className="section white division-section">

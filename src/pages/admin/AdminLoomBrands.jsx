@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Edit, Trash2 } from 'lucide-react';
 import { api } from '../../api';
-import { formatDate, Modal, PageHeader, Pagination } from './AdminHelpers';
+import { ConfirmDialog, formatDate, Modal, PageHeader, Pagination } from './AdminHelpers';
 
 export default function AdminLoomBrands() {
   const [rows, setRows] = useState([]);
@@ -10,6 +10,7 @@ export default function AdminLoomBrands() {
   const [editing, setEditing] = useState(null);
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [confirming, setConfirming] = useState(null);
 
   const load = () => api.adminLoomBrands({ page, page_size: 10 }).then((data) => {
     setRows(data.results);
@@ -39,9 +40,14 @@ export default function AdminLoomBrands() {
   };
 
   const remove = async (row) => {
-    if (!window.confirm(`Delete loom brand "${row.name}"?`)) return;
-    await api.deleteLoomBrand(row.id);
-    await load();
+    try {
+      await api.deleteLoomBrand(row.id);
+      await load();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setConfirming(null);
+    }
   };
 
   return (
@@ -65,7 +71,7 @@ export default function AdminLoomBrands() {
                 <td className="px-5 py-4">
                   <div className="flex justify-end gap-2">
                     <button onClick={() => openForm(row)} className="grid h-9 w-9 place-items-center rounded-lg bg-slate-100 text-slate-600"><Edit size={16} /></button>
-                    <button onClick={() => remove(row)} className="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-600"><Trash2 size={16} /></button>
+                    <button onClick={() => setConfirming(row)} className="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-600"><Trash2 size={16} /></button>
                   </div>
                 </td>
               </tr>
@@ -82,6 +88,13 @@ export default function AdminLoomBrands() {
             <button className="rounded-lg bg-teal px-5 py-3 text-sm font-black text-white">Save Loom Brand</button>
           </form>
         </Modal>
+      )}
+      {confirming && (
+        <ConfirmDialog
+          message={`Delete loom brand "${confirming.name}"? This action cannot be undone.`}
+          onCancel={() => setConfirming(null)}
+          onConfirm={() => remove(confirming)}
+        />
       )}
     </div>
   );

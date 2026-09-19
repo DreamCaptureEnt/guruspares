@@ -28,14 +28,14 @@ export default function Company() {
         image={pageHeroImages.company}
         imageAlt="Guru Tex Spares manufacturing facility"
       >
-        <p>{company.name} is a trusted manufacturer and supplier of textile machinery spares for shuttle and shuttle-less looms, with practical support for machinery requirements across Southern India.</p>
+        <p>{company.name} is a trusted manufacturer and supplier of textile machinery spares for shuttle and shuttle-less Airjet looms, with practical support for machinery requirements across Southern India.</p>
       </PageHero>
 
       <section className="section white">
         <div className="wrap grid-2">
           <div className="reveal">
             <p className="eyebrow">Who We Are</p>
-            <h2>More than two decades of focused textile spare expertise.</h2>
+            <h2>More than 25 years of focused textile spare expertise.</h2>
             <p className="muted">
               Established in 2000, Guru Tex Spares has built strong experience in supplying reliable spare parts, rubber
               components, engineering plastic parts, and customized solutions for different loom requirements. We started
@@ -44,7 +44,7 @@ export default function Company() {
             </p>
             <p className="muted">
               Today, we manufacture and supply rubber spares, engineering plastic components, temple-related parts, gears,
-              bobbin components, poppet valve parts, and other customized loom spares. With more than two decades of
+              bobbin components, poppet valve parts, and other customized loom spares.               With more than 25 years of
               industry experience, our focus remains on delivering reliable, durable, and cost-effective products while
               understanding each customer&rsquo;s specific machinery requirement.
             </p>

@@ -87,8 +87,8 @@ export default function Home() {
         <div className="wrap grid-2">
           <div className="reveal">
             <p className="eyebrow">Who We Are</p>
-            <h2>Precision spares for shuttle and shuttle-less airjet looms.</h2>
-            <p className="muted">Guru Tex Spares is a manufacturer and supplier of airjet loom spares across Southern India. The facility is equipped for reliable production, custom fitting and maintenance-oriented support.</p>
+            <h2>Precision spares for shuttle and shuttle-less Airjet looms.</h2>
+            <p className="muted">Guru Tex Spares is a manufacturer and supplier of Airjet loom spares across Southern India. The facility is equipped for reliable production, custom fitting and maintenance-oriented support.</p>
             <div className="pill-list">{strengths.map(item => <span className="pill" key={item}>{item}</span>)}</div>
           </div>
           <div className="grid-2 reveal">

@@ -12,6 +12,7 @@
 .admin-shell main {
   max-width: 1180px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .admin-shell h1,
@@ -49,8 +50,163 @@
   font-size: 13px;
 }
 
+.admin-shell .overflow-hidden:has(> table) {
+  overflow-x: auto;
+}
+
 .admin-shell img {
   max-width: 100%;
+}
+
+.admin-modal,
+.admin-confirm {
+  isolation: isolate;
+}
+
+.admin-modal {
+  z-index: 9000 !important;
+}
+
+.admin-modal__panel {
+  max-height: min(90vh, 900px);
+}
+
+.admin-confirm {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483647 !important;
+  display: grid !important;
+  place-items: center !important;
+  background: rgba(2, 6, 23, .72) !important;
+  color: #0f172a !important;
+  pointer-events: auto !important;
+}
+
+.admin-confirm__backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  border: 0;
+  background: rgba(2, 6, 23, .72) !important;
+  cursor: default;
+  z-index: 0 !important;
+}
+
+.admin-confirm__panel {
+  position: relative !important;
+  z-index: 1 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: #fff !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0;
+  pointer-events: auto !important;
+}
+
+.admin-confirm__panel h2,
+.admin-confirm__panel p,
+.admin-confirm__panel button {
+  position: relative;
+  z-index: 2;
+}
+
+.admin-confirm__panel h2 {
+  color: #0f172a !important;
+}
+
+.admin-confirm__panel p {
+  color: #475569 !important;
+}
+
+.admin-confirm__panel button {
+  cursor: pointer !important;
+}
+
+.admin-shell button,
+.admin-shell a,
+.admin-shell input,
+.admin-shell select,
+.admin-shell textarea {
+  min-height: 40px;
+}
+
+.admin-shell button {
+  touch-action: manipulation;
+}
+
+.admin-shell .overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.toast-container {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 11000;
+  padding: 16px;
+  pointer-events: none !important;
+}
+
+.toast {
+  position: relative;
+  z-index: 1;
+  min-width: min(320px, calc(100vw - 32px));
+  max-width: min(420px, calc(100vw - 32px));
+  min-height: 56px;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, .2);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, .28);
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  animation: adminToastIn .2s ease-out both;
+}
+
+.toast--success {
+  background: #059669 !important;
+}
+
+.toast--error {
+  background: #dc2626 !important;
+}
+
+.toast--info {
+  background: #2563eb !important;
+}
+
+.toast--warning {
+  background: #d97706 !important;
+}
+
+.toast p {
+  margin: 0;
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+.toast button {
+  min-width: 32px;
+  min-height: 32px;
+  border: 0;
+  background: transparent;
+  color: #fff !important;
+  opacity: 1 !important;
+  cursor: pointer;
+  pointer-events: auto !important;
+}
+
+.toast button:hover {
+  background: rgba(255, 255, 255, .2);
+}
+
+@keyframes adminToastIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .min-h-screen { min-height: 100vh; }
@@ -337,6 +493,37 @@ input:focus, select:focus, textarea:focus {
   .admin-shell .text-4xl {
     font-size: 28px;
     line-height: 1.1;
+  }
+
+  .admin-shell .min-w-\[720px\] {
+    min-width: 680px;
+  }
+
+  .admin-shell .min-w-\[1040px\] {
+    min-width: 920px;
+  }
+
+  .admin-shell .admin-modal,
+  .admin-shell .admin-confirm {
+    padding: 12px;
+  }
+
+  .admin-shell .admin-modal__panel,
+  .admin-shell .admin-confirm__panel {
+    max-height: calc(100dvh - 24px);
+  }
+
+  .admin-shell .admin-modal__panel > .p-6 {
+    padding: 16px;
+  }
+
+  .toast-container {
+    align-items: stretch;
+    padding: 12px;
+  }
+
+  .toast {
+    width: 100%;
   }
 }
 

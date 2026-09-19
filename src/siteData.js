@@ -3,7 +3,6 @@ export const company = {
   tagline: 'Manufacturer and Supplier of Spares and Accessories for Airjet Looms',
   phones: ['+91-9843040307', '+91-9865702505'],
   email: 'guruengg.madurai@gmail.com',
-  indiamart: 'https://www.indiamart.com/gurutexspares/',
   address: [
     '47 A, Mannar Thirmalai Naicker Street',
     'Thanigai Nagar, Thiru Nagar',
@@ -50,7 +49,7 @@ export const productGroups = [
 ];
 
 export const strengths = [
-  'Precision spares for shuttle and shuttle-less airjet looms',
+  'Precision spares for shuttle and shuttle-less Airjet looms',
   'Custom solutions for temple mark issues and poppet valve choking',
   'Maintenance support for selected spares including selvedge rollers',
   'Products used across Toyota, Tsudakoma, Picanol, Dornier, Itema, Sulzer, Somet and Ruti-C loom lines',

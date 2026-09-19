@@ -34,7 +34,7 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={{ success, error, info, warning }}>
       {children}
-      <div className="pointer-events-none fixed inset-0 z-[9999] flex flex-col items-end justify-start gap-3 p-6">
+      <div className="toast-container pointer-events-none fixed inset-0 flex flex-col items-end justify-start gap-3 p-6">
         {toasts.map((toast) => (
           <Toast key={toast.id} toast={toast} onClose={() => removeToast(toast.id)} />
         ))}
@@ -51,24 +51,17 @@ function Toast({ toast, onClose }) {
     warning: <AlertTriangle size={20} />,
   };
 
-  const styles = {
-    success: 'bg-emerald-500 text-white',
-    error: 'bg-red-500 text-white',
-    info: 'bg-blue-500 text-white',
-    warning: 'bg-amber-500 text-white',
-  };
-
   return (
     <div
-      className={`pointer-events-auto flex min-w-80 max-w-md items-center gap-3 rounded-lg px-5 py-4 shadow-lg ${
-        styles[toast.type]
-      } animate-slide-in`}
+      className={`toast toast--${toast.type} pointer-events-auto flex items-center gap-3 rounded-lg px-5 py-4 shadow-lg`}
     >
       <div className="shrink-0">{icons[toast.type]}</div>
       <p className="flex-1 text-sm font-semibold">{toast.message}</p>
       <button
+        type="button"
         onClick={onClose}
         className="shrink-0 rounded p-1 hover:bg-white/20 transition-colors"
+        aria-label="Close notification"
       >
         <X size={18} />
       </button>
