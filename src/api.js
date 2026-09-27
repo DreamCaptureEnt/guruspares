@@ -159,6 +159,12 @@ export const api = {
   product: (id) =>
     apiRequest(`/products/${id}/`),
 
+  contactEnquiry: (body) =>
+    apiRequest('/contact-enquiry/', {
+      method: 'POST',
+      body,
+    }),
+
   adminDivisions: (params) =>
     apiRequest('/admin/divisions/', { params }),
 
