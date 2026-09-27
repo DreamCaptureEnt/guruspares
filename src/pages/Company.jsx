@@ -1,7 +1,7 @@
 import React from 'react';
-import { Award, Factory, Lightbulb, Settings, ShieldCheck, Target } from 'lucide-react';
+import { Award, Factory, Lightbulb, Settings, ShieldCheck, Target, Wrench } from 'lucide-react';
 import PageHero from '../components/PageHero';
-import { company, pageHeroImages, strengths } from '../siteData';
+import { company, pageHeroImages } from '../siteData';
 
 const companyCards = [
   [Factory, 'Facility', 'Equipped for precision spare manufacturing.'],
@@ -19,12 +19,21 @@ const whyChoose = [
   ['Cost-Effective Products', 'Our products are developed with a focus on durability, performance, and cost-effectiveness, making them a reliable choice for our customers.'],
 ];
 
+const offerCards = [
+  ['Precision Spares', 'Precision spares for shuttle and shuttle-less Airjet looms'],
+  ['Custom Solutions', 'Customized solutions for temple-related issues and poppet valve choking'],
+  ['Specialized Components', 'Specialized components including selvedge rollers and temple rings'],
+  ['Rubber & Plastic Parts', 'Rubber and engineering plastic components for textile machinery'],
+  ['Custom Manufacturing', 'Custom-designed and manufactured loom spares'],
+  ['Loom Compatibility', 'Products compatible with Toyota, Tsudakoma, Picanol, Dornier, Itema, Sulzer, Somet, and Ruti-C loom lines'],
+];
+
 export default function Company() {
   return (
     <>
       <PageHero
         eyebrow="Company"
-        title="Reliable loom spare manufacturing from Madurai."
+        title="Your Trusted Partner for Textile Loom Spares"
         image={pageHeroImages.company}
         imageAlt="Guru Tex Spares manufacturing facility"
       >
@@ -35,40 +44,58 @@ export default function Company() {
         <div className="wrap grid-2">
           <div className="reveal">
             <p className="eyebrow">Who We Are</p>
-            <h2>More than 25 years of focused textile spare expertise.</h2>
+            <h2>25+ Years of Expertise in Textile Loom Spares</h2>
             <p className="muted">
-              Established in 2000, Guru Tex Spares has built strong experience in supplying reliable spare parts, rubber
-              components, engineering plastic parts, and customized solutions for different loom requirements. We started
-              by supplying spares for Ruti &lsquo;C&rsquo; looms and gradually expanded our product range to support
-              different textile machinery requirements.
+              Established in 2000, Guru Tex Spares has built over 25 years of experience in manufacturing and supplying
+              reliable spare parts, rubber components, engineering plastic parts, and customized solutions for textile looms.
             </p>
             <p className="muted">
-              Today, we manufacture and supply rubber spares, engineering plastic components, temple-related parts, gears,
-              bobbin components, poppet valve parts, and other customized loom spares.               With more than 25 years of
-              industry experience, our focus remains on delivering reliable, durable, and cost-effective products while
-              understanding each customer&rsquo;s specific machinery requirement.
+              We began by supplying spares for Ruti &lsquo;C&rsquo; looms and have steadily expanded our expertise and product
+              range to meet the evolving requirements of modern weaving machinery.
             </p>
             <p className="muted">
-              Our focus is on quality, durability, practical solutions, and dependable customer support.
+              Today, we manufacture and supply a wide range of rubber spares, engineering plastic components,
+              temple-related parts, gears, bobbin components, poppet valve parts, and customized loom spares.
             </p>
-            <div className="pill-list">
-              {strengths.map((item) => <span className="pill" key={item}>{item}</span>)}
-            </div>
+            <p className="muted">
+              Our extensive industry experience gives us a practical understanding of loom operations and the challenges
+              faced by textile mills. We focus on providing reliable, durable, and cost-effective solutions tailored to
+              each customer&rsquo;s specific machinery requirements.
+            </p>
           </div>
 
-          <div className="grid-2 reveal">
-            {companyCards.map(([Icon, title, copy]) => (
+          <div className="company-offer-panel reveal">
+            <h3>What We Offer</h3>
+            <div className="company-offer-grid">
+              {offerCards.map(([title, copy]) => (
+                <article className="company-offer-card" key={title}>
+                  <Wrench size={18} aria-hidden="true" />
+                  <strong>{title}</strong>
+                  <p>{copy}</p>
+                </article>
+              ))}
+            </div>
+            <div className="company-commitment">
+              <strong>Our Commitment</strong>
+              <p>Quality products. Practical solutions. Reliable service. Long-term customer relationships.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap grid-2 reveal">
+          {companyCards.map(([Icon, title, copy]) => (
               <div className="card feature-card" key={title}>
                 <Icon color="#0f766e" />
                 <h3>{title}</h3>
                 <p className="muted">{copy}</p>
               </div>
             ))}
-          </div>
         </div>
       </section>
 
-      <section className="section">
+      <section className="section white">
         <div className="wrap company-statement-grid">
           <article className="card company-statement reveal">
             <span className="statement-icon"><Target size={22} aria-hidden="true" /></span>
