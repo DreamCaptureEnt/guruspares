@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BadgeCheck, ChevronLeft, ChevronRight, Cog, Factory, LifeBuoy, Package, Wrench } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Cog } from 'lucide-react';
 import { api } from '../api';
-import { company, homeSlides, productGroups, strengths } from '../siteData';
+import { company, homeSlides, productGroups } from '../siteData';
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
@@ -63,7 +63,10 @@ export default function Home() {
           <div className="hero-content reveal">
             <p className="eyebrow">Madurai based loom spare specialists</p>
             <h1>{company.name}</h1>
-            <p>{company.tagline}. We manufacture temple rings, heald frame guides, spacers, lino-bobbin spares, poppet tops, selvedge rollers and custom-made loom components.</p>
+            <h2>25+ Years of Expertise in Airjet Loom Spares</h2>
+            <p>We manufacture and supply quality spares and accessories for Airjet Looms, backed by over 25 years of textile industry experience.</p>
+            <p>Our products include Temple Rings, Temple Dummy Rings, Heald Frame Guides, Spacers, Bobbins, Leno-Bobbin Spares, Poppet Tops, Selvedge Rollers and custom-made loom components.</p>
+            <p className="hero-proof">Precision Manufacturing | Reliable Quality | Trusted by Textile Customers</p>
             <div className="actions">
               <Link className="btn-primary" to="/products">Browse Products <ArrowRight size={18} /></Link>
               <Link className="btn-secondary" to="/contact">Request Enquiry</Link>
@@ -75,32 +78,13 @@ export default function Home() {
       <section className="section white">
         <div className="wrap stat-grid reveal">
           {[
-            ['2000', 'Founded and serving textile customers'],
+            ['1,000+', 'Unique Products'],
             ['10+', 'Loom brands supported'],
-            ['3', 'Product and service divisions'],
-            ['South India', 'Customer base focus'],
+            ['600+', 'Customers Served'],
+            ['95%', 'Customer Retention Rate'],
+            ['5 States', 'Serving Customers Across India'],
+            ['4.8 / 5', 'Customer Rating'],
           ].map(([value, label]) => <div className="stat" key={value}><strong>{value}</strong><span>{label}</span></div>)}
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="wrap grid-2">
-          <div className="reveal">
-            <p className="eyebrow">Who We Are</p>
-            <h2>Precision spares for shuttle and shuttle-less Airjet looms.</h2>
-            <p className="muted">Guru Tex Spares is a manufacturer and supplier of Airjet loom spares across Southern India. The facility is equipped for reliable production, custom fitting and maintenance-oriented support.</p>
-            <div className="pill-list">{strengths.map(item => <span className="pill" key={item}>{item}</span>)}</div>
-          </div>
-          <div className="grid-2 reveal">
-            {[
-              [Factory, 'Manufacturing', 'Well-equipped facility with high-end machinery.'],
-              [BadgeCheck, 'Quality', 'Stringent process handling across manufacturing and operations.'],
-              [Wrench, 'Custom Work', 'Solutions for temple marks and poppet valve choking.'],
-              [LifeBuoy, 'Maintenance', 'Selected spare maintenance, including selvedge rollers.'],
-            ].map(([Icon, title, copy]) => (
-              <div className="card feature-card" key={title}><Icon color="#0f766e" /><h3>{title}</h3><p className="muted">{copy}</p></div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -109,7 +93,7 @@ export default function Home() {
           <div className="section-head reveal">
             <div>
               <p className="eyebrow">Product Range</p>
-              <h2>Built around loom brands, spare types and custom requirements.</h2>
+              <h2>A comprehensive range of loom spares, components, and customized solutions built around your specific requirements</h2>
             </div>
             <Link className="btn-secondary" to="/products">View Catalogue <ArrowRight size={16} /></Link>
           </div>
