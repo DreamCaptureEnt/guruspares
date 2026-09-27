@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 :root {
-  /* Indigo-dye + brass industrial theme. Var names kept so existing rules re-theme. */
-  --ink: #1b1d2e;      /* deep indigo ink (text)        */
-  --muted: #616579;    /* muted indigo-grey            */
-  --line: #dde0e7;     /* cool hairline                */
-  --paper: #eef0f4;    /* cool light paper (page bg)   */
+  /* Blue shades + white theme. Var names kept so existing rules re-theme. */
+  --ink: #102033;
+  --muted: #5a6a7d;
+  --line: #d7e5f2;
+  --paper: #e9f1fa;
   --white: #ffffff;
-  --teal: #343a94;     /* PRIMARY  = indigo dye        */
-  --teal-2: #5860d8;   /* bright indigo (focus/accent) */
-  --steel: #232538;    /* indigo-steel (dark surfaces) */
-  --amber: #b3812f;    /* SECONDARY = brass / ochre    */
+  --teal: #00abe4;
+  --teal-2: #007cb0;
+  --steel: #12344d;
+  --amber: #2368a2;
   --display: 'Space Grotesk', Inter, system-ui, -apple-system, sans-serif;
 }
 
@@ -76,7 +76,7 @@ p { line-height: 1.65; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
 .card { background: #fff; border: 1px solid rgba(223,231,236,.95); border-radius: 16px; padding: clamp(18px, 2.4vw, 26px); box-shadow: 0 14px 36px rgba(20,33,43,.055); min-width: 0; }
 .card:hover { transform: translateY(-2px); box-shadow: 0 20px 48px rgba(20,33,43,.09); }
-.stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 18px 45px rgba(20,33,43,.06); }
+.stat-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 18px 45px rgba(20,33,43,.06); }
 .stat { background: #fff; padding: 20px; }
 .stat strong { display: block; font-size: clamp(22px, 3vw, 30px); color: var(--teal); }
 .muted { color: var(--muted); }
@@ -1556,4 +1556,131 @@ h2 { letter-spacing: -0.01em; }
 
   /* The preloader gear is decorative and expected to keep turning. */
   .preloader__logo { animation: preloaderSpin 1.2s linear infinite !important; }
+}
+
+/* ============================================================
+   Requested content/update pass
+   ============================================================ */
+.hero-proof {
+  font-weight: 900;
+  color: #fff !important;
+}
+
+.stat-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.stat span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.company-offer-panel {
+  display: grid;
+  gap: 18px;
+  align-self: stretch;
+}
+
+.company-offer-panel h3 {
+  font-size: clamp(22px, 2.4vw, 30px);
+}
+
+.company-offer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.company-offer-card {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(0, 171, 228, .08);
+}
+
+.company-offer-card svg {
+  color: var(--teal);
+}
+
+.company-offer-card strong {
+  color: var(--ink);
+}
+
+.company-offer-card p,
+.company-commitment p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.company-commitment {
+  padding: 16px;
+  border-radius: 8px;
+  background: #e9f1fa;
+  border: 1px solid #cbe0f2;
+}
+
+.contact-phone-list,
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.contact-phone-list a,
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contact-card textarea {
+  resize: none;
+}
+
+.catalogue-count {
+  margin: 8px 0 0;
+  font-weight: 700;
+}
+
+.pagination__nav:disabled,
+.btn-primary:disabled {
+  opacity: .42;
+  box-shadow: none;
+  transform: none;
+}
+
+.pagination__nav:disabled:hover,
+.btn-primary:disabled:hover {
+  transform: none;
+}
+
+.product-back-link {
+  width: fit-content;
+  margin-bottom: 14px;
+}
+
+.image-viewer__topbar > div:first-child {
+  min-width: 0;
+}
+
+@media (max-width: 980px) {
+  .stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .company-offer-grid,
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
 }
