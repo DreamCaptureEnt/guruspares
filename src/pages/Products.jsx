@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ArrowRight, ArrowUpDown, ChevronLeft, ChevronRight, Cog,
-  PackageCheck, Search, SlidersHorizontal, Star, Tags, X,
+  Search, SlidersHorizontal, Star, Tags, X,
 } from 'lucide-react';
 import { api } from '../api';
 import PageHero from '../components/PageHero';
@@ -203,7 +203,8 @@ export default function Products() {
           <div className="section-head catalogue-head reveal" ref={topRef}>
             <div>
               <p className="eyebrow"><SlidersHorizontal size={14} /> {brandName || 'Complete range'}</p>
-              <h2>{headline}</h2>
+              <h2>Our Product Catalogue</h2>
+              <p className="muted catalogue-count">{headline}</p>
             </div>
             <label className="catalogue-sort">
               <ArrowUpDown size={15} aria-hidden="true" />
@@ -265,11 +266,11 @@ export default function Products() {
                     }}
                   >
                     <div className="catalogue-card__media">
-                      <span className={`catalogue-card__code${product.featured ? ' is-featured' : ''}`}>
-                        {product.featured
-                          ? <><Star size={13} aria-hidden="true" /> Featured</>
-                          : <><PackageCheck size={14} aria-hidden="true" /> Spare</>}
-                      </span>
+                      {product.featured && (
+                        <span className="catalogue-card__code is-featured">
+                          <Star size={13} aria-hidden="true" /> Featured
+                        </span>
+                      )}
                       <div className="product-visual">
                         {product.images?.[0]?.url
                           ? <img src={product.images[0].url} alt={product.name} loading="lazy" />
