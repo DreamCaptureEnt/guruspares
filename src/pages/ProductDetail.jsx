@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, BadgeCheck, Cog, FileText, LifeBuoy, Maximize2, ShieldCheck, Wrench } from 'lucide-react';
+import { ArrowLeft, Cog, FileText, LifeBuoy, Maximize2, ShieldCheck, Wrench } from 'lucide-react';
 import { api } from '../api';
 import ImageViewer from '../components/ImageViewer';
 import PageHero from '../components/PageHero';
@@ -106,7 +106,6 @@ export default function ProductDetail() {
         title={product.name}
         image={primaryImage?.url || pageHeroImages.products}
         imageAlt={primaryImage?.file_name || product.name}
-        actions={<Link to="/products" className="btn-secondary"><ArrowLeft size={16} /> Products</Link>}
         className={primaryImage?.url ? 'page-hero--product' : ''}
       >
         {product.description && <p>{product.description}</p>}
@@ -115,6 +114,7 @@ export default function ProductDetail() {
       <section className="section white">
         <div className="wrap product-sheet">
           <div className="product-gallery">
+            <Link to="/products" className="btn-secondary product-back-link"><ArrowLeft size={16} /> Products</Link>
             <button
               type="button"
               className="product-visual product-detail-visual"
@@ -180,9 +180,8 @@ export default function ProductDetail() {
             <span className="enquiry-panel__icon"><Wrench size={22} aria-hidden="true" /></span>
             <h2>Enquiry support</h2>
             <p className="muted">Share your loom model, part reference, quantity and any wear, choking or temple-mark issue. Guru Tex Spares can advise on availability or custom fitment.</p>
-            {(product.featured || product.maintenance_available || product.custom_solution) && (
+            {(product.maintenance_available || product.custom_solution) && (
               <div className="pill-list" style={{ margin: '20px 0' }}>
-                {product.featured && <span className="pill"><BadgeCheck size={14} aria-hidden="true" /> Featured</span>}
                 {product.maintenance_available && <span className="pill"><LifeBuoy size={14} aria-hidden="true" /> Maintenance</span>}
                 {product.custom_solution && <span className="pill"><Wrench size={14} aria-hidden="true" /> Custom solution</span>}
               </div>
