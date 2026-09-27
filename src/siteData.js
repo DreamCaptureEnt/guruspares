@@ -4,10 +4,16 @@ export const company = {
   phones: ['+91-9843040307', '+91-9865702505'],
   email: 'guruengg.madurai@gmail.com',
   address: [
-    '47 A, Mannar Thirmalai Naicker Street',
+    '47 A, Mannar Thirumalai Naicker Street',
     'Thanigai Nagar, Thiru Nagar',
-    'Madurai - 625006',
+    'Madurai, Tamil Nadu, India',
+    'Pincode: 625006',
   ],
+  socials: {
+    instagram: 'https://www.instagram.com/gurutexspares/',
+    facebook: 'https://www.facebook.com/gurutex.spares',
+    linkedin: 'https://www.linkedin.com/company/guru-tex-spares-madurai-tamilnadu-india/?viewAsMember=true',
+  },
 };
 
 const imageBase = `${process.env.PUBLIC_URL || ''}/guruspares-images`;
