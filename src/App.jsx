@@ -6,7 +6,6 @@ import Home from './pages/Home';
 import Company from './pages/Company';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
-import Careers from './pages/Careers';
 import Contact from './pages/Contact';
 import Preloader from './components/Preloader';
 import { ToastProvider } from './components/Toast';
@@ -110,7 +109,7 @@ function AppRoutes() {
           <Route path="/company" element={<Company />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/careers" element={<Careers />} />
+          <Route path="/careers" element={<Navigate to="/" replace />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/divisions" element={<Navigate to="/" replace />} />
           <Route path="/responsibility" element={<Navigate to="/" replace />} />
