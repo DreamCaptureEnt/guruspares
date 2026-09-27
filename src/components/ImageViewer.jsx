@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight, Download, ExternalLink, Minus, Plus, RotateCcw, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, Minus, Plus, RotateCcw, X } from 'lucide-react';
 
 export default function ImageViewer({ images = [], initialIndex = 0, title = 'Image preview', onClose }) {
   const safeImages = useMemo(() => images.filter((image) => image?.url), [images]);
@@ -36,6 +36,26 @@ export default function ImageViewer({ images = [], initialIndex = 0, title = 'Im
 
   if (!current) return null;
 
+  const downloadImage = async () => {
+    try {
+      const response = await fetch(current.url);
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = current.file_name || `${title}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(objectUrl);
+    } catch {
+      const link = document.createElement('a');
+      link.href = current.url;
+      link.download = current.file_name || true;
+      link.click();
+    }
+  };
+
   const overlay = (
     <div className="image-viewer" role="dialog" aria-modal="true" aria-label={title}>
       <button className="image-viewer__backdrop" type="button" onClick={onClose} aria-label="Close image viewer" />
@@ -43,16 +63,15 @@ export default function ImageViewer({ images = [], initialIndex = 0, title = 'Im
       <div className="image-viewer__panel">
         <div className="image-viewer__topbar">
           <div>
-            <p className="image-viewer__eyebrow">{index + 1} / {safeImages.length}</p>
-            <h2>{current.file_name || title}</h2>
+            {hasMany && <p className="image-viewer__eyebrow">{index + 1} / {safeImages.length}</p>}
+            <h2>{title}</h2>
           </div>
           <div className="image-viewer__actions">
             <button type="button" onClick={() => setZoom((value) => Math.max(.5, Number((value - .25).toFixed(2))))} aria-label="Zoom out"><Minus size={18} /></button>
             <span>{Math.round(zoom * 100)}%</span>
             <button type="button" onClick={() => setZoom((value) => Math.min(3, Number((value + .25).toFixed(2))))} aria-label="Zoom in"><Plus size={18} /></button>
             <button type="button" onClick={() => setZoom(1)} aria-label="Reset zoom"><RotateCcw size={18} /></button>
-            <a href={current.url} download={current.file_name || true} aria-label="Download image"><Download size={18} /></a>
-            <a href={current.url} target="_blank" rel="noreferrer" aria-label="Open image in new tab"><ExternalLink size={18} /></a>
+            <button type="button" onClick={downloadImage} aria-label="Download image"><Download size={18} /></button>
             <button type="button" onClick={onClose} aria-label="Close image viewer"><X size={19} /></button>
           </div>
         </div>
