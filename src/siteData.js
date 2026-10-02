@@ -4,7 +4,7 @@ export const company = {
   phones: ['+91-9843040307', '+91-9865702505'],
   email: 'guruengg.madurai@gmail.com',
   address: [
-    '47 A, Mannar Thirumalai Naicker Street',
+    'No. 1/8, Mannar Thirumalai Naicker Street',
     'Thanigai Nagar, Thiru Nagar',
     'Madurai, Tamil Nadu, India',
     'Pincode: 625006',
