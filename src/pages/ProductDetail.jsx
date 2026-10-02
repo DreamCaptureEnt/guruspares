@@ -29,10 +29,12 @@ export default function ProductDetail() {
 
   const productImages = product?.images || [];
   const primaryImage = productImages[selectedIndex] || productImages[0];
+  const itemCode = product
+    ? product.item_code || product.sku || product.code || `GS-${String(product.id).padStart(4, '0')}`
+    : '';
 
-  const rows = useMemo(() => (product ? [
+  const infoRows = useMemo(() => (product ? [
     ['Spare category', product.product_category_name],
-    ['Loom brand', product.loom_brand_name],
     ['Part type', product.part_type],
     ['Material', product.material],
     ['Compatible looms', product.compatible_looms],
@@ -163,11 +165,32 @@ export default function ProductDetail() {
           <div className="product-spec-panel">
             <div className="spec-heading">
               <p className="eyebrow"><FileText size={14} aria-hidden="true" /> Product sheet</p>
-              <h2>Specifications</h2>
+              <h2>Product Details</h2>
             </div>
-            {rows.length ? (
+            <dl className="info-list product-detail-summary">
+              <div className="info-row">
+                <dt><strong>Product Name</strong></dt>
+                <dd className="product-detail-value--truncate">
+                  <span title={product.name}>{product.name}</span>
+                </dd>
+              </div>
+              <div className="info-row">
+                <dt><strong>Item Code</strong></dt>
+                <dd><span>{itemCode}</span></dd>
+              </div>
+              <div className="info-row">
+                <dt><strong>Loom Brand</strong></dt>
+                <dd><span>{product.loom_brand_name || 'Multiple loom brands'}</span></dd>
+              </div>
+            </dl>
+
+            <div className="product-info-heading">
+              <h3>Info</h3>
+            </div>
+
+            {infoRows.length ? (
               <dl className="info-list">
-                {rows.map(([label, value]) => (
+                {infoRows.map(([label, value]) => (
                   <div className="info-row" key={label}>
                     <dt><strong>{label}</strong></dt>
                     <dd><span>{value}</span></dd>
