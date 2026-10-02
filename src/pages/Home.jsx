@@ -7,10 +7,24 @@ import { company, homeSlides, productGroups } from '../siteData';
 export default function Home() {
   const [featured, setFeatured] = useState([]);
   const [active, setActive] = useState(0);
-  const slideCount = homeSlides.length;
+  const [slides, setSlides] = useState(homeSlides);
+  const slideCount = slides.length;
 
   useEffect(() => {
     api.products({ featured: true, page_size: 6 }).then(data => setFeatured(data.results || [])).catch(() => setFeatured([]));
+  }, []);
+
+  useEffect(() => {
+    let activeRequest = true;
+    api.siteImages()
+      .then((data) => {
+        if (activeRequest && data.home?.length) {
+          setSlides(data.home.map((image) => image.url));
+          setActive(0);
+        }
+      })
+      .catch(() => {});
+    return () => { activeRequest = false; };
   }, []);
 
   useEffect(() => {
@@ -25,7 +39,7 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="hero-slideshow" aria-hidden="true">
-          {homeSlides.map((slide, index) => (
+          {slides.map((slide, index) => (
             <img
               key={slide}
               src={slide}
@@ -44,7 +58,7 @@ export default function Home() {
               <ChevronRight size={20} aria-hidden="true" />
             </button>
             <div className="hero-dots" role="tablist" aria-label="Slides">
-              {homeSlides.map((slide, index) => (
+              {slides.map((slide, index) => (
                 <button
                   key={slide}
                   type="button"

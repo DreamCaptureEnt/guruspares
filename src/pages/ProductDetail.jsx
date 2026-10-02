@@ -54,6 +54,7 @@ export default function ProductDetail() {
           eyebrow="Loom spare"
           title={<span className="sk sk--dark" style={{ display: 'inline-block', width: 'min(440px, 78%)', height: '.85em', borderRadius: 8, verticalAlign: '-2px' }}>&nbsp;</span>}
           image={pageHeroImages.products}
+          imageKey="products"
           actions={<span className="btn-secondary" style={{ opacity: .55, pointerEvents: 'none' }}><ArrowLeft size={16} /> Products</span>}
         />
         <section className="section white">
@@ -104,7 +105,9 @@ export default function ProductDetail() {
       <PageHero
         eyebrow={product.product_category_name || 'Loom spare'}
         title={product.name}
-        image={primaryImage?.url || pageHeroImages.products}
+        image={pageHeroImages.products}
+        imageKey="products"
+        imageOverride={primaryImage?.url}
         imageAlt={primaryImage?.file_name || product.name}
         className={primaryImage?.url ? 'page-hero--product' : ''}
       >
@@ -179,7 +182,7 @@ export default function ProductDetail() {
           <aside className="enquiry-panel">
             <span className="enquiry-panel__icon"><Wrench size={22} aria-hidden="true" /></span>
             <h2>Enquiry support</h2>
-            <p className="muted">Share your loom model, part reference, quantity and any wear, choking or temple-mark issue. Guru Tex Spares can advise on availability or custom fitment.</p>
+            <p className="muted">Share your Looom brand, Model, Product Name, Item code Mentioned,quandity, or type of issue you need to address. we can help you by availability or any custom requirments.</p>
             {(product.maintenance_available || product.custom_solution) && (
               <div className="pill-list" style={{ margin: '20px 0' }}>
                 {product.maintenance_available && <span className="pill"><LifeBuoy size={14} aria-hidden="true" /> Maintenance</span>}

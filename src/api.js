@@ -159,6 +159,8 @@ export const api = {
   product: (id) =>
     apiRequest(`/products/${id}/`),
 
+  siteImages: () => apiRequest('/site-images/'),
+
   contactEnquiry: (body) =>
     apiRequest('/contact-enquiry/', {
       method: 'POST',
@@ -179,6 +181,30 @@ export const api = {
 
   adminProducts: (params) =>
     apiRequest('/admin/products/', { params }),
+
+  adminSiteImages: () =>
+    apiRequest('/admin/site-images/'),
+
+  uploadSiteImage: (placement, file) => {
+    const formData = new FormData();
+    formData.append('placement', placement);
+    formData.append('image', file);
+    return apiRequest('/admin/site-images/', {
+      method: 'POST',
+      body: formData,
+    });
+  },
+
+  deleteSiteImage: (id) =>
+    apiRequest(`/admin/site-images/${id}/`, {
+      method: 'DELETE',
+    }),
+
+  reorderSiteImages: (imageIds) =>
+    apiRequest('/admin/site-images/reorder/', {
+      method: 'POST',
+      body: { image_ids: imageIds },
+    }),
 
   createDivision: (body) =>
     apiRequest('/admin/divisions/', {

@@ -35,6 +35,7 @@ export default function Company() {
         eyebrow="Company"
         title="Your Trusted Partner for Textile Loom Spares"
         image={pageHeroImages.company}
+        imageKey="company"
         imageAlt="Guru Tex Spares manufacturing facility"
       >
         <p>{company.name} is a trusted manufacturer and supplier of textile machinery spares for shuttle and shuttle-less Airjet looms, with practical support for machinery requirements across Southern India.</p>

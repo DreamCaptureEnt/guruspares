@@ -13,7 +13,7 @@ const items = [
 export default function Responsibility() {
   return (
     <>
-      <PageHero eyebrow="Responsibility" title="Quality-led supply for production-critical loom parts." image={pageHeroImages.responsibility} imageAlt="Quality focused loom spare manufacturing">
+      <PageHero eyebrow="Responsibility" title="Quality-led supply for production-critical loom parts." image={pageHeroImages.responsibility} imageKey="responsibility" imageAlt="Quality focused loom spare manufacturing">
         <p>Every spare has to fit a real machine, solve a real stoppage and earn trust on the shop floor.</p>
       </PageHero>
 

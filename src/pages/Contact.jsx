@@ -8,6 +8,8 @@ import { company, pageHeroImages } from '../siteData';
 const initialForm = {
   name: '',
   contact: '',
+  company_name: '',
+  address: '',
   message: '',
 };
 
@@ -32,6 +34,8 @@ export default function Contact() {
     const payload = {
       name: form.name.trim(),
       contact: form.contact.trim(),
+      company_name: form.company_name.trim(),
+      address: form.address.trim(),
       message: form.message.trim(),
     };
 
@@ -62,7 +66,7 @@ export default function Contact() {
 
   return (
     <>
-      <PageHero eyebrow="Contact" title="For enquiries" image={pageHeroImages.contact} imageAlt="Guru Tex Spares contact banner">
+      <PageHero eyebrow="Contact" title="For enquiries" image={pageHeroImages.contact} imageKey="contact" imageAlt="Guru Tex Spares contact banner">
       </PageHero>
 
       <section className="section white">
@@ -120,12 +124,26 @@ export default function Contact() {
               onChange={(event) => updateField('contact', event.target.value)}
               placeholder="Phone / email"
             />
+            <input
+              className="input"
+              required
+              value={form.company_name}
+              onChange={(event) => updateField('company_name', event.target.value)}
+              placeholder="Company name"
+            />
+            <textarea
+              rows={3}
+              required
+              value={form.address}
+              onChange={(event) => updateField('address', event.target.value)}
+              placeholder="Company address"
+            />
             <textarea
               rows={6}
               required
               value={form.message}
               onChange={(event) => updateField('message', event.target.value)}
-              placeholder="Loom brand, spare name, quantity and issue details"
+              placeholder="Loom brand, spare name, item code, quantity and issue details"
             />
             <button className="btn-primary" type="submit" disabled={submitting}>
               {submitting ? 'Submitting...' : 'Submit Enquiry'} <Send size={16} />

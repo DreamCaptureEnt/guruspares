@@ -28,7 +28,7 @@ export default function Careers() {
 
   return (
     <>
-      <PageHero eyebrow="Careers" title="Work with Guru Tex Spares" image={pageHeroImages.careers} imageAlt="Guru Tex Spares careers and workshop">
+      <PageHero eyebrow="Careers" title="Work with Guru Tex Spares" image={pageHeroImages.careers} imageKey="careers" imageAlt="Guru Tex Spares careers and workshop">
         <p>For workshop, machining, quality, sales or service opportunities, contact the team with your profile.</p>
       </PageHero>
 

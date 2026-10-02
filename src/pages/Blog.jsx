@@ -12,7 +12,7 @@ const posts = [
 export default function Blog() {
   return (
     <>
-      <PageHero eyebrow="Updates" title="Textile spare notes and product updates" image={pageHeroImages.blog} imageAlt="Textile machinery update banner">
+      <PageHero eyebrow="Updates" title="Textile spare notes and product updates" image={pageHeroImages.blog} imageKey="blog" imageAlt="Textile machinery update banner">
         <p>Use this section for maintenance tips, product announcements and loom spare guidance.</p>
       </PageHero>
 

@@ -5,10 +5,12 @@ import { ConfirmDialog, formatDate, Modal, PageHeader, Pagination } from './Admi
 
 export default function AdminCategories() {
   const [rows, setRows] = useState([]);
+  const [divisions, setDivisions] = useState([]);
   const [meta, setMeta] = useState({});
   const [page, setPage] = useState(1);
   const [editing, setEditing] = useState(null);
   const [name, setName] = useState('');
+  const [division, setDivision] = useState('');
   const [error, setError] = useState('');
   const [confirming, setConfirming] = useState(null);
 
@@ -21,17 +23,24 @@ export default function AdminCategories() {
     load().catch((err) => setError(err.message));
   }, [page]);
 
+  useEffect(() => {
+    api.adminDivisions({ page_size: 500 })
+      .then((data) => setDivisions(data.results || []))
+      .catch((err) => setError(err.message || 'Failed to load divisions.'));
+  }, []);
+
   const openForm = (row = null) => {
     setEditing(row || {});
     setName(row?.name || '');
+    setDivision(row?.division ? String(row.division) : '');
     setError('');
   };
 
   const save = async (event) => {
     event.preventDefault();
     try {
-      if (editing.id) await api.updateCategory(editing.id, { name });
-      else await api.createCategory({ name });
+      if (editing.id) await api.updateCategory(editing.id, { name, division });
+      else await api.createCategory({ name, division });
       setEditing(null);
       await load();
     } catch (err) {
@@ -59,6 +68,7 @@ export default function AdminCategories() {
           <thead className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
             <tr>
               <th className="px-5 py-4">Name</th>
+              <th className="px-5 py-4">Division</th>
               <th className="px-5 py-4">Created</th>
               <th className="px-5 py-4 text-right">Actions</th>
             </tr>
@@ -67,6 +77,7 @@ export default function AdminCategories() {
             {rows.map((row) => (
               <tr key={row.id}>
                 <td className="px-5 py-4 font-bold text-slate-900">{row.name}</td>
+                <td className="px-5 py-4 text-sm text-slate-600">{row.division_name || 'Not assigned'}</td>
                 <td className="px-5 py-4 text-sm text-slate-500">{formatDate(row.created_at)}</td>
                 <td className="px-5 py-4">
                   <div className="flex justify-end gap-2">
@@ -84,7 +95,22 @@ export default function AdminCategories() {
       {editing && (
         <Modal title={editing.id ? 'Edit Product Category' : 'Add Product Category'} onClose={() => setEditing(null)}>
           <form onSubmit={save} className="space-y-5">
-            <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Product category name" className="w-full rounded-lg border border-slate-200 px-4 py-3" />
+            <label className="grid gap-2">
+              <span className="text-sm font-bold text-slate-700">Division</span>
+              <select
+                required
+                value={division}
+                onChange={(event) => setDivision(event.target.value)}
+                className="w-full rounded-lg border border-slate-200 px-4 py-3"
+              >
+                <option value="">Select division</option>
+                {divisions.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+              </select>
+            </label>
+            <label className="grid gap-2">
+              <span className="text-sm font-bold text-slate-700">Category name</span>
+              <input required value={name} onChange={(event) => setName(event.target.value)} placeholder="Product category name" className="w-full rounded-lg border border-slate-200 px-4 py-3" />
+            </label>
             <button className="rounded-lg bg-teal px-5 py-3 text-sm font-black text-white">Save Category</button>
           </form>
         </Modal>

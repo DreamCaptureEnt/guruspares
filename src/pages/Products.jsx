@@ -43,10 +43,10 @@ export default function Products() {
   const [reloadKey, setReloadKey] = useState(0);
   const topRef = useRef(null);
 
-  // Load the filter option lists once.
+  // Load categories for the active division; an unscoped catalogue shows each division in its label.
   useEffect(() => {
     let active = true;
-    Promise.all([api.categories({ page_size: 100 }), api.loomBrands({ page_size: 100 })])
+    Promise.all([api.categories({ page_size: 500, division }), api.loomBrands({ page_size: 500 })])
       .then(([cat, brandData]) => {
         if (!active) return;
         setCategories(cat.results || []);
@@ -54,7 +54,7 @@ export default function Products() {
       })
       .catch(() => {});
     return () => { active = false; };
-  }, []);
+  }, [division]);
 
   // Merge changes into the URL. Any filter change resets pagination to page 1.
   const patchParams = (updates, { resetPage = true } = {}) => {
@@ -160,7 +160,7 @@ export default function Products() {
 
   return (
     <>
-      <PageHero eyebrow="Products" title="Airjet loom spares catalogue" image={pageHeroImages.products} imageAlt="Airjet loom spare products">
+      <PageHero eyebrow="Products" title="Airjet loom spares catalogue" image={pageHeroImages.products} imageKey="products" imageAlt="Airjet loom spare products">
         <p>Temple rings, loom accessories, plastic and rubber products, air cutter spares, poppet valve parts and selected maintenance items - filter to the exact fitment for your loom.</p>
       </PageHero>
 
@@ -184,7 +184,11 @@ export default function Products() {
             aria-label="Filter by spare category"
           >
             <option value="">All spare categories</option>
-            {categories.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+            {categories.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}{!division && item.division_name ? ` — ${item.division_name}` : ''}
+              </option>
+            ))}
           </select>
           <select
             className="select"

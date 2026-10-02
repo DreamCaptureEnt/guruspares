@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { BarChart2, Boxes, Grid3X3, LayoutDashboard, LogOut, PackagePlus } from 'lucide-react';
+import { BarChart2, Boxes, Grid3X3, Image, LayoutDashboard, LogOut, PackagePlus } from 'lucide-react';
 import { api } from '../../api';
 
 const adminLinks = [
@@ -9,6 +9,7 @@ const adminLinks = [
   { to: '/admin/product-categories', label: 'Categories', Icon: Grid3X3 },
   { to: '/admin/loom-brands', label: 'Loom Brands', Icon: Grid3X3 },
   { to: '/admin/products', label: 'Products', Icon: PackagePlus },
+  { to: '/admin/site-images', label: 'Site Images', Icon: Image },
   { to: '/admin/products-report', label: 'Products Report', Icon: BarChart2 },
 ];
 

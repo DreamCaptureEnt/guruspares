@@ -21,6 +21,7 @@ const AdminCategories = lazy(() => import('./pages/admin/AdminCategories'));
 const AdminLoomBrands = lazy(() => import('./pages/admin/AdminLoomBrands'));
 const AdminProducts = lazy(() => import('./pages/admin/AdminProducts'));
 const AdminProductsReport = lazy(() => import('./pages/admin/AdminProductsReport'));
+const AdminSiteImages = lazy(() => import('./pages/admin/AdminSiteImages'));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -92,6 +93,7 @@ function AppRoutes() {
               <Route path="/admin/product-categories" element={<AdminCategories />} />
               <Route path="/admin/loom-brands" element={<AdminLoomBrands />} />
               <Route path="/admin/products" element={<AdminProducts />} />
+              <Route path="/admin/site-images" element={<AdminSiteImages />} />
               <Route path="/admin/products-report" element={<AdminProductsReport />} />
             </Route>
           </Route>

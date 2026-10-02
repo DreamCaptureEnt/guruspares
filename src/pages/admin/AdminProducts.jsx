@@ -51,6 +51,9 @@ export default function AdminProducts() {
   }), [page, search, divisionFilter]);
 
   const canReorderProducts = Boolean(divisionFilter) && !search.trim() && (meta.total_pages || 1) <= 1;
+  const categoriesForDivision = categories.filter(
+    (category) => String(category.division) === String(form.division),
+  );
 
   const load = useCallback(() => {
     return api.adminProducts(params).then((data) => {
@@ -62,7 +65,7 @@ export default function AdminProducts() {
   useEffect(() => {
     Promise.all([
       api.adminDivisions({ page_size: 100 }),
-      api.adminCategories({ page_size: 100 }),
+      api.adminCategories({ page_size: 500 }),
       api.adminLoomBrands({ page_size: 100 }),
     ]).then(([divisionData, categoryData, loomBrandData]) => {
       setDivisions(divisionData.results);
@@ -112,7 +115,11 @@ export default function AdminProducts() {
   };
 
   const updateField = (field, value) => {
-    setForm((current) => ({ ...current, [field]: value }));
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+      ...(field === 'division' ? { product_category: '' } : {}),
+    }));
   };
 
   const save = async (event) => {
@@ -357,10 +364,11 @@ export default function AdminProducts() {
                     <select
                       value={form.product_category}
                       onChange={(event) => updateField('product_category', event.target.value)}
+                      disabled={!form.division}
                       className="rounded-lg border border-slate-300 px-4 py-3 text-slate-900 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/20"
                     >
-                      <option value="">Select category</option>
-                      {categories.map((category) => (
+                      <option value="">{form.division ? 'Select category' : 'Select division first'}</option>
+                      {categoriesForDivision.map((category) => (
                         <option key={category.id} value={category.id}>
                           {category.name}
                         </option>
