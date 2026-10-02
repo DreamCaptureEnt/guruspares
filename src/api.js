@@ -2,6 +2,7 @@ function defaultApiBase() {
   return 'https://guruspares.dreamcapture.in/api';
 }
 
+// https://guruspares.dreamcapture.in/api
 const API_BASE = process.env.REACT_APP_API_BASE || defaultApiBase();
 const AUTH_TOKEN_KEY = 'guruspares_admin_token';
 
@@ -185,11 +186,23 @@ export const api = {
   adminSiteImages: () =>
     apiRequest('/admin/site-images/'),
 
-  uploadSiteImage: (placement, file) => {
+  uploadSiteImage: (placement, files) => {
+    const payload = files instanceof File ? { image: files } : files;
     const formData = new FormData();
     formData.append('placement', placement);
-    formData.append('image', file);
+    if (payload?.image) formData.append('image', payload.image);
+    if (payload?.mobileImage) formData.append('mobile_image', payload.mobileImage);
     return apiRequest('/admin/site-images/', {
+      method: 'POST',
+      body: formData,
+    });
+  },
+
+  updateSiteImage: (id, files) => {
+    const formData = new FormData();
+    if (files?.image) formData.append('image', files.image);
+    if (files?.mobileImage) formData.append('mobile_image', files.mobileImage);
+    return apiRequest(`/admin/site-images/${id}/`, {
       method: 'POST',
       body: formData,
     });
@@ -200,10 +213,10 @@ export const api = {
       method: 'DELETE',
     }),
 
-  reorderSiteImages: (imageIds) =>
+  reorderSiteImages: (placement, imageIds) =>
     apiRequest('/admin/site-images/reorder/', {
       method: 'POST',
-      body: { image_ids: imageIds },
+      body: { placement, image_ids: imageIds },
     }),
 
   createDivision: (body) =>
