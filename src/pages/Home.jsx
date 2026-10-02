@@ -4,10 +4,14 @@ import { ArrowRight, ChevronLeft, ChevronRight, Cog } from 'lucide-react';
 import { api } from '../api';
 import { company, homeSlides, productGroups } from '../siteData';
 
+function normalizeSlide(slide) {
+  return typeof slide === 'string' ? { url: slide, mobile_url: '' } : slide;
+}
+
 export default function Home() {
   const [featured, setFeatured] = useState([]);
   const [active, setActive] = useState(0);
-  const [slides, setSlides] = useState(homeSlides);
+  const [slides, setSlides] = useState(homeSlides.map(normalizeSlide));
   const slideCount = slides.length;
 
   useEffect(() => {
@@ -19,7 +23,7 @@ export default function Home() {
     api.siteImages()
       .then((data) => {
         if (activeRequest && data.home?.length) {
-          setSlides(data.home.map((image) => image.url));
+          setSlides(data.home.filter((image) => image.url || image.mobile_url).map(normalizeSlide));
           setActive(0);
         }
       })
@@ -39,14 +43,19 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="hero-slideshow" aria-hidden="true">
-          {slides.map((slide, index) => (
-            <img
-              key={slide}
-              src={slide}
-              alt=""
-              className={`hero-slide${index === active ? ' is-active' : ''}`}
-            />
-          ))}
+          {slides.map((slide, index) => {
+            const desktopUrl = slide.url || slide.mobile_url;
+            return (
+              <picture key={`${desktopUrl}-${slide.mobile_url || ''}`}>
+                {slide.mobile_url && <source media="(max-width: 560px)" srcSet={slide.mobile_url} />}
+                <img
+                  src={desktopUrl}
+                  alt=""
+                  className={`hero-slide${index === active ? ' is-active' : ''}`}
+                />
+              </picture>
+            );
+          })}
         </div>
 
         {slideCount > 1 && (
@@ -60,7 +69,7 @@ export default function Home() {
             <div className="hero-dots" role="tablist" aria-label="Slides">
               {slides.map((slide, index) => (
                 <button
-                  key={slide}
+                  key={`${slide.url || slide.mobile_url}-${index}`}
                   type="button"
                   role="tab"
                   aria-selected={index === active}
