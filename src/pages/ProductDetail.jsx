@@ -34,7 +34,7 @@ export default function ProductDetail() {
     : '';
 
   const infoRows = useMemo(() => (product ? [
-    ['Spare category', product.product_category_name],
+    ['Product', product.division_name],
     ['Part type', product.part_type],
     ['Material', product.material],
     ['Compatible looms', product.compatible_looms],
@@ -105,7 +105,7 @@ export default function ProductDetail() {
   return (
     <>
       <PageHero
-        eyebrow={product.product_category_name || 'Loom spare'}
+        eyebrow={product.division_name || 'Loom spare'}
         title={product.name}
         image={pageHeroImages.products}
         imageKey="products"
@@ -179,7 +179,7 @@ export default function ProductDetail() {
                 <dd><span>{itemCode}</span></dd>
               </div>
               <div className="info-row">
-                <dt><strong>Loom Brand</strong></dt>
+                <dt><strong>Brand</strong></dt>
                 <dd><span>{product.loom_brand_name || 'Multiple loom brands'}</span></dd>
               </div>
             </dl>
