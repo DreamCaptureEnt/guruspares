@@ -19,7 +19,7 @@ async function fetchAllProducts() {
 
 function exportToCSV(products) {
   const headers = [
-    'ID', 'Name', 'Division', 'Product Category', 'Loom Brand',
+    'ID', 'Name', 'Product', 'Brand',
     'Part Type', 'Material', 'Application', 'Status', 'Featured', 'Created At',
   ];
 
@@ -36,8 +36,7 @@ function exportToCSV(products) {
     escape(p.id),
     escape(p.name),
     escape(p.division_name || ''),
-    escape(p.product_category_name || ''),
-    escape(p.product_chemical_category_name || ''),
+    escape(p.loom_brand_name || ''),
     escape(p.part_type || p.formulation || ''),
     escape(p.material || p.composition || ''),
     escape(p.application || p.packing_size || ''),
@@ -57,21 +56,19 @@ function exportToCSV(products) {
 }
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({ divisions: 0, categories: 0, chemicalCategories: 0, products: 0 });
+  const [stats, setStats] = useState({ divisions: 0, brands: 0, products: 0 });
   const [exporting, setExporting] = useState(false);
   const [exportError, setExportError] = useState('');
 
   useEffect(() => {
     Promise.all([
       api.adminDivisions({ page_size: 1 }),
-      api.adminCategories({ page_size: 1 }),
-      api.adminChemicalCategories({ page_size: 1 }),
+      api.adminLoomBrands({ page_size: 1 }),
       api.adminProducts({ page_size: 1 }),
-    ]).then(([divisions, categories, chemicalCategories, products]) => {
+    ]).then(([divisions, brands, products]) => {
       setStats({
         divisions: divisions.count,
-        categories: categories.count,
-        chemicalCategories: chemicalCategories.count,
+        brands: brands.count,
         products: products.count,
       });
     });
@@ -91,10 +88,9 @@ export default function AdminDashboard() {
   };
 
   const cards = [
-    { label: 'Divisions', value: stats.divisions, Icon: Boxes },
-    { label: 'Product Categories', value: stats.categories, Icon: Grid3X3 },
-    { label: 'Loom Brands', value: stats.chemicalCategories, Icon: Grid3X3 },
-    { label: 'Products', value: stats.products, Icon: PackagePlus },
+    { label: 'Products', value: stats.divisions, Icon: Boxes },
+    { label: 'Brands', value: stats.brands, Icon: Grid3X3 },
+    { label: 'Spares', value: stats.products, Icon: PackagePlus },
   ];
 
   return (
