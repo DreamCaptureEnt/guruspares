@@ -10,12 +10,10 @@ import { pageHeroImages } from '../siteData';
 
 const PAGE_SIZE = 12;
 
-// Requires the backend to support DRF-style `ordering`. Remove this block and the
-// sort control below if your API doesn't expose it — everything else still works.
 const SORT_OPTIONS = [
   { value: '', label: 'Relevance' },
-  { value: 'name', label: 'Name (A–Z)' },
-  { value: '-name', label: 'Name (Z–A)' },
+  { value: 'name', label: 'Name (A-Z)' },
+  { value: '-name', label: 'Name (Z-A)' },
   { value: '-featured', label: 'Featured first' },
   { value: '-created_at', label: 'Newest first' },
 ];
@@ -24,10 +22,7 @@ export default function Products() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // The URL is the single source of truth for every filter — so views are
-  // shareable and the browser back/forward buttons behave as users expect.
   const search = searchParams.get('search') || '';
-  const category = searchParams.get('category') || '';
   const brand = searchParams.get('loom_brand') || '';
   const division = searchParams.get('division') || '';
   const ordering = searchParams.get('ordering') || '';
@@ -35,7 +30,7 @@ export default function Products() {
 
   const [searchInput, setSearchInput] = useState(search);
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [divisions, setDivisions] = useState([]);
   const [brands, setBrands] = useState([]);
   const [meta, setMeta] = useState({});
   const [error, setError] = useState('');
@@ -43,20 +38,6 @@ export default function Products() {
   const [reloadKey, setReloadKey] = useState(0);
   const topRef = useRef(null);
 
-  // Load categories for the active division; an unscoped catalogue shows each division in its label.
-  useEffect(() => {
-    let active = true;
-    Promise.all([api.categories({ page_size: 500, division }), api.loomBrands({ page_size: 500 })])
-      .then(([cat, brandData]) => {
-        if (!active) return;
-        setCategories(cat.results || []);
-        setBrands(brandData.results || []);
-      })
-      .catch(() => {});
-    return () => { active = false; };
-  }, [division]);
-
-  // Merge changes into the URL. Any filter change resets pagination to page 1.
   const patchParams = (updates, { resetPage = true } = {}) => {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
@@ -69,23 +50,39 @@ export default function Products() {
     });
   };
 
-  // Keep the search box aligned when the URL changes externally (chips, back button).
+  useEffect(() => {
+    let active = true;
+    Promise.all([
+      api.divisions({ page_size: 500 }),
+      api.loomBrands({ page_size: 500, division }),
+    ])
+      .then(([divisionData, brandData]) => {
+        if (!active) return;
+        const nextBrands = brandData.results || [];
+        setDivisions(divisionData.results || []);
+        setBrands(nextBrands);
+        if (brand && !nextBrands.some((item) => String(item.id) === String(brand))) {
+          patchParams({ loom_brand: '' });
+        }
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, [division, brand]);
+
   useEffect(() => { setSearchInput(search); }, [search]);
 
-  // Debounce typing into the URL so we don't fire a request on every keystroke.
   useEffect(() => {
     const trimmed = searchInput.trim();
     if (trimmed === search) return undefined;
     const timer = setTimeout(() => patchParams({ search: trimmed }), 300);
     return () => clearTimeout(timer);
-  }, [searchInput]);
+  }, [searchInput, search]);
 
-  // Fetch products whenever any query input changes.
   useEffect(() => {
     let active = true;
     setLoading(true);
     setError('');
-    api.products({ page, page_size: PAGE_SIZE, search, category, loom_brand: brand, division, ordering })
+    api.products({ page, page_size: PAGE_SIZE, search, loom_brand: brand, division, ordering })
       .then((data) => {
         if (!active) return;
         setProducts(data.results || []);
@@ -95,37 +92,31 @@ export default function Products() {
         if (!active) return;
         setProducts([]);
         setMeta({});
-        setError('We couldn’t load the catalogue just now. Check your connection and try again.');
+        setError('We could not load the catalogue just now. Check your connection and try again.');
       })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [page, search, category, brand, division, ordering, reloadKey]);
+  }, [page, search, brand, division, ordering, reloadKey]);
 
-  const categoryName = useMemo(
-    () => categories.find((c) => String(c.id) === String(category))?.name,
-    [categories, category],
+  const divisionName = useMemo(
+    () => divisions.find((item) => String(item.id) === String(division))?.name,
+    [divisions, division],
   );
   const brandName = useMemo(
-    () => brands.find((b) => String(b.id) === String(brand))?.name,
+    () => brands.find((item) => String(item.id) === String(brand))?.name,
     [brands, brand],
   );
 
   const activeFilters = [
-    search && { key: 'search', label: `“${search}”`, clear: () => { setSearchInput(''); patchParams({ search: '' }); } },
-    category && { key: 'category', label: categoryName || 'Category', clear: () => patchParams({ category: '' }) },
-    brand && { key: 'loom_brand', label: brandName || 'Loom brand', clear: () => patchParams({ loom_brand: '' }) },
+    search && { key: 'search', label: `"${search}"`, clear: () => { setSearchInput(''); patchParams({ search: '' }); } },
+    division && { key: 'division', label: divisionName || 'Products', clear: () => patchParams({ division: '', loom_brand: '' }) },
+    brand && { key: 'loom_brand', label: brandName || 'Brand', clear: () => patchParams({ loom_brand: '' }) },
   ].filter(Boolean);
   const hasFilters = activeFilters.length > 0;
 
-  // Clear the filters the user can toggle, but stay inside the current division context.
   const clearAll = () => {
     setSearchInput('');
-    setSearchParams((prev) => {
-      const next = new URLSearchParams();
-      const div = prev.get('division');
-      if (div) next.set('division', div);
-      return next;
-    });
+    setSearchParams(new URLSearchParams());
   };
 
   const totalCount = meta.count || 0;
@@ -139,7 +130,6 @@ export default function Products() {
     topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  // Compact, windowed page list: 1 … 4 5 6 … 20
   const pageList = useMemo(() => {
     if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
     const pages = [1];
@@ -153,10 +143,10 @@ export default function Products() {
   }, [totalPages, currentPage]);
 
   const headline = loading
-    ? 'Loading products…'
+    ? 'Loading products...'
     : totalCount === 0
       ? 'No products found'
-      : `Showing ${rangeStart}–${rangeEnd} of ${totalCount} ${totalCount === 1 ? 'item' : 'items'}`;
+      : `Showing ${rangeStart}-${rangeEnd} of ${totalCount} ${totalCount === 1 ? 'item' : 'items'}`;
 
   return (
     <>
@@ -172,31 +162,27 @@ export default function Products() {
               type="search"
               className="input"
               value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search by spare, material or loom brand…"
+              onChange={(event) => setSearchInput(event.target.value)}
+              placeholder="Search by spare, material or brand..."
               aria-label="Search products"
             />
           </label>
           <select
             className="select"
-            value={category}
-            onChange={(e) => patchParams({ category: e.target.value })}
-            aria-label="Filter by spare category"
+            value={division}
+            onChange={(event) => patchParams({ division: event.target.value, loom_brand: '' })}
+            aria-label="Filter by products"
           >
-            <option value="">All spare categories</option>
-            {categories.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}{!division && item.division_name ? ` — ${item.division_name}` : ''}
-              </option>
-            ))}
+            <option value="">All Products</option>
+            {divisions.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
           </select>
           <select
             className="select"
             value={brand}
-            onChange={(e) => patchParams({ loom_brand: e.target.value })}
-            aria-label="Filter by loom brand"
+            onChange={(event) => patchParams({ loom_brand: event.target.value })}
+            aria-label="Filter by brand"
           >
-            <option value="">All loom brands</option>
+            <option value="">All Brands</option>
             {brands.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
           </select>
         </div>
@@ -206,7 +192,7 @@ export default function Products() {
         <div className="wrap">
           <div className="section-head catalogue-head reveal" ref={topRef}>
             <div>
-              <p className="eyebrow"><SlidersHorizontal size={14} /> {brandName || 'Complete range'}</p>
+              <p className="eyebrow"><SlidersHorizontal size={14} /> {brandName || divisionName || 'Complete range'}</p>
               <h2>Our Product Catalogue</h2>
               <p className="muted catalogue-count">{headline}</p>
             </div>
@@ -216,7 +202,7 @@ export default function Products() {
               <select
                 className="select"
                 value={ordering}
-                onChange={(e) => patchParams({ ordering: e.target.value })}
+                onChange={(event) => patchParams({ ordering: event.target.value })}
                 aria-label="Sort products"
               >
                 {SORT_OPTIONS.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
@@ -226,9 +212,9 @@ export default function Products() {
 
           {hasFilters && (
             <div className="filter-chips" role="group" aria-label="Active filters">
-              {activeFilters.map((f) => (
-                <button type="button" key={f.key} className="filter-chip" onClick={f.clear}>
-                  {f.label}
+              {activeFilters.map((filter) => (
+                <button type="button" key={filter.key} className="filter-chip" onClick={filter.clear}>
+                  {filter.label}
                   <X size={13} aria-hidden="true" />
                 </button>
               ))}
@@ -239,8 +225,8 @@ export default function Products() {
           <div aria-live="polite" aria-busy={loading}>
             {loading ? (
               <div className="catalogue-grid">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div className="product-card catalogue-card skeleton-card" key={i}>
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <div className="product-card catalogue-card skeleton-card" key={index}>
                     <div className="catalogue-card__media"><div className="skeleton-visual" /></div>
                     <div className="product-body"><span /><strong /><p /></div>
                   </div>
@@ -250,7 +236,7 @@ export default function Products() {
               <div className="card catalogue-empty reveal">
                 <h3>Catalogue unavailable</h3>
                 <p className="muted">{error}</p>
-                <button type="button" className="btn-primary" onClick={() => setReloadKey((k) => k + 1)}>Try again</button>
+                <button type="button" className="btn-primary" onClick={() => setReloadKey((key) => key + 1)}>Try again</button>
               </div>
             ) : products.length ? (
               <div className="catalogue-grid">
@@ -260,7 +246,7 @@ export default function Products() {
                     key={product.id}
                     role="link"
                     tabIndex={0}
-                    aria-label={`${product.name} — view details`}
+                    aria-label={`${product.name} - view details`}
                     onClick={() => navigate(`/products/${product.id}`)}
                     onKeyDown={(event) => {
                       if (event.key === 'Enter' || event.key === ' ') {
@@ -282,9 +268,9 @@ export default function Products() {
                       </div>
                     </div>
                     <div className="product-body">
-                      <p className="meta"><Tags size={13} aria-hidden="true" /> {product.product_category_name || 'Spare'}</p>
+                      <p className="meta"><Tags size={13} aria-hidden="true" /> {product.division_name || 'Product'}</p>
                       <h3>{product.name}</h3>
-                      <p className="muted">{product.loom_brand_name || product.compatible_looms || 'Multiple loom brands'}</p>
+                      <p className="muted">{product.loom_brand_name || product.compatible_looms || 'Multiple brands'}</p>
                       {(product.application || product.part_type || product.material) && (
                         <p className="catalogue-card__desc">{product.application || product.part_type || product.material}</p>
                       )}
@@ -296,7 +282,7 @@ export default function Products() {
             ) : (
               <div className="card catalogue-empty reveal">
                 <h3>No matching spares</h3>
-                <p className="muted">Nothing matched these filters. Try a different loom brand, category or product name.</p>
+                <p className="muted">Nothing matched these filters. Try a different product group, brand or product name.</p>
                 {hasFilters && <button type="button" className="btn-secondary" onClick={clearAll}>Clear filters</button>}
               </div>
             )}
@@ -314,18 +300,18 @@ export default function Products() {
                 <ChevronLeft size={16} /> Prev
               </button>
               <div className="pagination__pages">
-                {pageList.map((p) => (typeof p === 'string' ? (
-                  <span className="pagination__gap" key={p} aria-hidden="true">…</span>
+                {pageList.map((item) => (typeof item === 'string' ? (
+                  <span className="pagination__gap" key={item} aria-hidden="true">...</span>
                 ) : (
                   <button
                     type="button"
-                    key={p}
-                    className={`pagination__page${p === currentPage ? ' is-active' : ''}`}
-                    aria-current={p === currentPage ? 'page' : undefined}
-                    aria-label={`Page ${p}`}
-                    onClick={() => goToPage(p)}
+                    key={item}
+                    className={`pagination__page${item === currentPage ? ' is-active' : ''}`}
+                    aria-current={item === currentPage ? 'page' : undefined}
+                    aria-label={`Page ${item}`}
+                    onClick={() => goToPage(item)}
                   >
-                    {p}
+                    {item}
                   </button>
                 )))}
               </div>
