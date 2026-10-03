@@ -2,7 +2,6 @@ import React from 'react';
 import { ArrowRight, BadgeCheck, Factory, Mail, Phone, Wrench } from 'lucide-react';
 import PageHero from '../components/PageHero';
 import { company, pageHeroImages } from '../siteData';
-
 const roles = [
   [Factory, 'Workshop and machining'],
   [BadgeCheck, 'Quality inspection'],
