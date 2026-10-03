@@ -26,7 +26,6 @@ export default function AdminProducts() {
   const toast = useToast();
   const [rows, setRows] = useState([]);
   const [divisions, setDivisions] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [loomBrands, setLoomBrands] = useState([]);
   const [meta, setMeta] = useState({});
   const [page, setPage] = useState(1);
@@ -51,9 +50,11 @@ export default function AdminProducts() {
   }), [page, search, divisionFilter]);
 
   const canReorderProducts = Boolean(divisionFilter) && !search.trim() && (meta.total_pages || 1) <= 1;
-  const categoriesForDivision = categories.filter(
-    (category) => String(category.division) === String(form.division),
-  );
+  const brandsForDivision = loomBrands.filter((brand) => (
+    !form.division
+    || !brand.divisions?.length
+    || brand.divisions.some((divisionId) => String(divisionId) === String(form.division))
+  ));
 
   const load = useCallback(() => {
     return api.adminProducts(params).then((data) => {
@@ -65,11 +66,9 @@ export default function AdminProducts() {
   useEffect(() => {
     Promise.all([
       api.adminDivisions({ page_size: 100 }),
-      api.adminCategories({ page_size: 500 }),
       api.adminLoomBrands({ page_size: 100 }),
-    ]).then(([divisionData, categoryData, loomBrandData]) => {
+    ]).then(([divisionData, loomBrandData]) => {
       setDivisions(divisionData.results);
-      setCategories(categoryData.results);
       setLoomBrands(loomBrandData.results);
     }).catch((err) => {
       toast.error('Failed to load product form options');
@@ -118,7 +117,7 @@ export default function AdminProducts() {
     setForm((current) => ({
       ...current,
       [field]: value,
-      ...(field === 'division' ? { product_category: '' } : {}),
+      ...(field === 'division' ? { product_category: '', loom_brand: '' } : {}),
     }));
   };
 
@@ -345,13 +344,13 @@ export default function AdminProducts() {
                     />
                   </label>
                   <label className="grid gap-2">
-                    <span className="text-sm font-bold text-slate-700">Division</span>
+                    <span className="text-sm font-bold text-slate-700">Product</span>
                     <select
                       value={form.division}
                       onChange={(event) => updateField('division', event.target.value)}
                       className="rounded-lg border border-slate-300 px-4 py-3 text-slate-900 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/20"
                     >
-                      <option value="">Select division</option>
+                      <option value="">Select product</option>
                       {divisions.map((division) => (
                         <option key={division.id} value={division.id}>
                           {division.name}
@@ -360,32 +359,16 @@ export default function AdminProducts() {
                     </select>
                   </label>
                   <label className="grid gap-2">
-                    <span className="text-sm font-bold text-slate-700">Product Category</span>
-                    <select
-                      value={form.product_category}
-                      onChange={(event) => updateField('product_category', event.target.value)}
-                      disabled={!form.division}
-                      className="rounded-lg border border-slate-300 px-4 py-3 text-slate-900 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/20"
-                    >
-                      <option value="">{form.division ? 'Select category' : 'Select division first'}</option>
-                      {categoriesForDivision.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="grid gap-2">
-                    <span className="text-sm font-bold text-slate-700">Loom Brand</span>
+                    <span className="text-sm font-bold text-slate-700">Brand</span>
                     <select
                       value={form.loom_brand}
                       onChange={(event) => updateField('loom_brand', event.target.value)}
                       className="rounded-lg border border-slate-300 px-4 py-3 text-slate-900 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/20"
                     >
-                      <option value="">Select loom brand</option>
-                      {loomBrands.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
+                      <option value="">Select brand</option>
+                      {brandsForDivision.map((brand) => (
+                        <option key={brand.id} value={brand.id}>
+                          {brand.name}
                         </option>
                       ))}
                     </select>
@@ -635,7 +618,7 @@ export default function AdminProducts() {
           onChange={(event) => setDivisionFilter(event.target.value)}
           className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-700 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/20 sm:max-w-xs"
         >
-          <option value="">All divisions</option>
+          <option value="">All products</option>
           {divisions.map((division) => (
             <option key={division.id} value={division.id}>
               {division.name}
@@ -645,8 +628,8 @@ export default function AdminProducts() {
       </div>
       <div className="mt-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500">
         {canReorderProducts
-          ? 'Drag products by the handle to update display order for this division.'
-          : 'Select one division and clear search to enable drag-and-drop product ordering.'}
+          ? 'Drag spares by the handle to update display order for this product group.'
+          : 'Select one product group and clear search to enable drag-and-drop ordering.'}
       </div>
       {error && (
         <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
@@ -660,9 +643,8 @@ export default function AdminProducts() {
               <th className="px-5 py-4">Move</th>
               <th className="px-5 py-4">Order</th>
               <th className="px-5 py-4">Name</th>
-              <th className="px-5 py-4">Division</th>
-              <th className="px-5 py-4">Category</th>
-              <th className="px-5 py-4">Loom Brand</th>
+              <th className="px-5 py-4">Product</th>
+              <th className="px-5 py-4">Brand</th>
               <th className="px-5 py-4">Featured</th>
               <th className="px-5 py-4">Status</th>
               <th className="px-5 py-4">Created</th>
@@ -687,7 +669,7 @@ export default function AdminProducts() {
                         ? 'cursor-grab border-slate-200 bg-slate-50 text-slate-500 active:cursor-grabbing'
                         : 'cursor-not-allowed border-slate-100 bg-slate-50 text-slate-300'
                     }`}
-                    title={canReorderProducts ? 'Drag to reorder' : 'Select a division to reorder'}
+                    title={canReorderProducts ? 'Drag to reorder' : 'Select a product group to reorder'}
                   >
                     <GripVertical size={17} />
                   </span>
@@ -696,9 +678,6 @@ export default function AdminProducts() {
                 <td className="px-5 py-4 font-bold text-slate-900">{row.name}</td>
                 <td className="px-5 py-4 text-sm text-slate-600">
                   {row.division_name || '-'}
-                </td>
-                <td className="px-5 py-4 text-sm text-slate-600">
-                  {row.product_category_name || '-'}
                 </td>
                 <td className="px-5 py-4 text-sm text-slate-600">
                   {row.loom_brand_name || '-'}
