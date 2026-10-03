@@ -56,7 +56,7 @@ export default function AdminDivisions() {
 
   return (
     <div>
-      <PageHeader title="Divisions" subtitle="Create and manage division records." onAdd={() => openForm()} addLabel="Add Division" />
+      <PageHeader title="Products" subtitle="Create and manage top-level product groups." onAdd={() => openForm()} addLabel="Add Product" />
       {error && <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">{error}</div>}
       <div className="mt-8 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
         <table className="w-full min-w-[720px] text-left">
@@ -88,18 +88,18 @@ export default function AdminDivisions() {
       <Pagination meta={meta} onPage={setPage} />
 
       {editing && (
-        <Modal title={editing.id ? 'Edit Division' : 'Add Division'} onClose={() => setEditing(null)}>
+        <Modal title={editing.id ? 'Edit Product' : 'Add Product'} onClose={() => setEditing(null)}>
           <form onSubmit={save} className="space-y-5">
-            <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Division name" className="w-full rounded-lg border border-slate-200 px-4 py-3" />
+            <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Product group name" className="w-full rounded-lg border border-slate-200 px-4 py-3" />
             <input value={tag} onChange={(event) => setTag(event.target.value)} placeholder="Tag (optional)" className="w-full rounded-lg border border-slate-200 px-4 py-3" />
             <textarea value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Description (optional)" rows={4} className="w-full rounded-lg border border-slate-200 px-4 py-3" />
-            <button className="rounded-lg bg-teal px-5 py-3 text-sm font-black text-white">Save Division</button>
+            <button className="rounded-lg bg-teal px-5 py-3 text-sm font-black text-white">Save Product</button>
           </form>
         </Modal>
       )}
       {confirming && (
         <ConfirmDialog
-          message={`Delete division "${confirming.name}"? This action cannot be undone.`}
+          message={`Delete product group "${confirming.name}"? This action cannot be undone.`}
           onCancel={() => setConfirming(null)}
           onConfirm={() => remove(confirming)}
         />
