@@ -5,9 +5,8 @@ import { api } from '../../api';
 
 const adminLinks = [
   { to: '/admin', label: 'Dashboard', Icon: LayoutDashboard, end: true },
-  { to: '/admin/divisions', label: 'Divisions', Icon: Boxes },
-  { to: '/admin/product-categories', label: 'Categories', Icon: Grid3X3 },
-  { to: '/admin/loom-brands', label: 'Loom Brands', Icon: Grid3X3 },
+  { to: '/admin/divisions', label: 'Products', Icon: Boxes },
+  { to: '/admin/loom-brands', label: 'Brands', Icon: Grid3X3 },
   { to: '/admin/products', label: 'Products', Icon: PackagePlus },
   { to: '/admin/site-images', label: 'Site Images', Icon: Image },
   { to: '/admin/products-report', label: 'Products Report', Icon: BarChart2 },
